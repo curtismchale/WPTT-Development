@@ -25,10 +25,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/**
- * @todo add logging of all emails locally
- */
-
 /* WP Logging to handle the logging */
 require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/WP_Logging.php' );
 
@@ -61,7 +57,7 @@ class WPTT_Dev{
 
 $wptt_dev = new WPTT_Dev();
 
-if( site_url() === WPTT_DEV ){
+if( site_url() === WPTT_LOCAL ){
     /* log the emails - requires wp logging */
     require_once( plugin_dir_path( __FILE__ ) . '/class.log-email.php' );
 }

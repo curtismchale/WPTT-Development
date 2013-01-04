@@ -1,5 +1,13 @@
 <?php
 /**
+ * @todo check for and toss an error if WP_Logging isn't around
+ * @todo test to make sure that no emails are getting sent
+ * @todo can I bundle this into a class
+ * @todo code when I have more coffee
+ * @todo build a better admin interface
+ */
+
+/**
  * wp_mail is a pluggable function so we are just declaring it and thus taking over for it.
  * Since we take over I'm logging all emails with WP_Logging.
  */
