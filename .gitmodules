@@ -1,0 +1,3 @@
+[submodule "lib/wp-logging"]
+	path = lib/wp-logging
+	url = https://github.com/pippinsplugins/WP-Logging.git
