@@ -87,3 +87,25 @@ if( ! function_exists( 'pr' ) ){
 
     }
 } // function_exists( pr )
+
+// @todo revisit this
+function wptt_log_error( $title, $message, $args = array() ){
+
+    global $wp_query;
+
+    $log_data = array(
+        'post_title'    => $title,
+        'post_content'  => wp_kses_post( $message ),
+        'log_type'      => 'error',
+    );
+
+    // meta
+    $log_meta = array(
+        'date_time'     => time(),
+        'wp_query'      => $wp_query,
+    );
+
+    $log_meta = array_merge( $log_meta, $args );
+
+    $log_entry = WP_Logging::insert_log( $log_data, $log_meta );
+}
