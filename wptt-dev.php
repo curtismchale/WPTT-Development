@@ -62,31 +62,29 @@ if( site_url() === WPTT_LOCAL ){
     require_once( plugin_dir_path( __FILE__ ) . '/class.log-email.php' );
 }
 
-if( ! function_exists( 'pr' ) ){
-    /*
-     * Produces print_r inside <pre> limited to development users
-     *
-     * @param string $data The variable we want to print
-     * @uses get_the_author_meta
-     * @uses current_user_can
-     * @ueses in_array
-     */
-    function pr( $data ) {
+/*
+ * Produces print_r inside <pre> limited to development users
+ *
+ * @param string $data The variable we want to print
+ * @uses get_the_author_meta
+ * @uses current_user_can
+ * @ueses in_array
+ */
+function pr( $data ) {
 
-        global $current_user;
+    global $current_user;
 
-        $validemails = array( 'curtis@curtismchale.ca', 'curtis.mchale@gmail.com' );
+    $validemails = array( 'curtis@curtismchale.ca', 'curtis.mchale@gmail.com' );
 
-        $useremail = get_the_author_meta( 'user_email', $current_user->ID );
+    $useremail = get_the_author_meta( 'user_email', $current_user->ID );
 
-        if( WP_DEBUG || current_user_can( 'activate_plugins' ) || in_array( $useremail, $validemails )  ){
-            echo '<pre>';
-            print_r( $data );
-            echo '</pre>';
-        }
-
+    if( WP_DEBUG || current_user_can( 'activate_plugins' ) || in_array( $useremail, $validemails )  ){
+        echo '<pre>';
+        print_r( $data );
+        echo '</pre>';
     }
-} // function_exists( pr )
+
+}
 
 // @todo revisit this
 function wptt_log_error( $title, $message, $args = array() ){
