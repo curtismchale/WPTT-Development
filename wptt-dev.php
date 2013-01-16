@@ -86,7 +86,15 @@ function pr( $data ) {
 
 }
 
-// @todo revisit this
+/**
+ * A helper function to log things inside your projects.
+ *
+ * @uses  wp_logging      WP_Logging class from @pippinsplugins
+ * @uses  wp_kses_post    sanitize my data of course
+ *
+ * @since   0.01
+ * @author  WP Theme Tutorial, Curtis McHale
+ */
 function wptt_log_error( $title, $message, $args = array() ){
 
     global $wp_query;
