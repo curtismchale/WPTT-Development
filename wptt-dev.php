@@ -59,7 +59,7 @@ $wptt_dev = new WPTT_Dev();
 
 if( site_url() === WPTT_LOCAL ){
     /* log the emails - requires wp logging */
-    require_once( plugin_dir_path( __FILE__ ) . '/class.log-email.php' );
+    require_once( plugin_dir_path( __FILE__ ) . '/pluggable.php' );
 }
 
 /*
