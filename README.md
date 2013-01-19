@@ -10,7 +10,15 @@ Very much a rough go at something I want.
 
 ### Future Plans
 
-- log all emails locally and in dev
-- define local/dev/live environments so we can do different things depending
 - make it easy to define which plugins should be activated in each environment
 - make it easy to allow options set based on plugins activated in different environments
+
+### Setup
+
+Define your environments in wp-config.php.
+
+##### Environments
+
+define( 'WPTT_LOCAL', 'http://local.domain.com' );
+define( 'WPTT_DEV', 'http://dev.domain.com' );
+define( 'WPTT_LIVE', 'http://domain.com' );
