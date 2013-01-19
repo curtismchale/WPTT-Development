@@ -84,7 +84,7 @@ function pr( $data ) {
         echo '</pre>';
     }
 
-}
+} // pr
 
 /**
  * A helper function to log things inside your projects.
@@ -114,4 +114,5 @@ function wptt_log_error( $title, $message, $args = array() ){
     $log_meta = array_merge( $log_meta, $args );
 
     $log_entry = WP_Logging::insert_log( $log_data, $log_meta );
-}
+
+} // wptt_log_error
