@@ -25,14 +25,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/* WP Logging to handle the logging */
-require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/WP_Logging.php' );
-
 class WPTT_Dev{
 
     function __construct(){
         add_filter( 'wp_logging_post_type_args', array( $this, 'change_logging_params' ), 10, 1 );
+
+	    $this->wp_logging();
     }
+
+	/**
+	 * Sets includes all the stuff we need from WP_Logging
+	 *
+	 * @since   0.01
+	 * @author  WP Theme Tutorial, Curtis McHale
+	 */
+	private function wp_logging(){
+		require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/WP_Logging.php' );
+		require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/Logging_UI.php' );
+	} // wp_logging
 
     /**
      * Changing the logging arguments for the post type so that we have a basic admin
@@ -56,11 +66,6 @@ class WPTT_Dev{
 } // wptt_dev
 
 $wptt_dev = new WPTT_Dev();
-
-if( defined( 'WPTT_LOCAL' ) && site_url() === WPTT_LOCAL ){
-    /* log the emails - requires wp logging */
-    require_once( plugin_dir_path( __FILE__ ) . '/pluggable.php' );
-}
 
 /*
  * Produces print_r inside <pre> limited to development users
