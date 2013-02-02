@@ -31,7 +31,126 @@ class WPTT_Dev{
         add_filter( 'wp_logging_post_type_args', array( $this, 'change_logging_params' ), 10, 1 );
 
 	    $this->includes();
+
+	    add_filter( 'wptt_dev_wp_mail', array( $this, 'log_wp_mail' ), 10, 6 );
     }
+
+	/**
+	 * Does the logging of wp_mail for us and allows us to define the environments. You can
+	 * filter if emails send on different environments using 'wptt_dev_env_email_log'. Defaults to
+	 * FALSE for local and dev environments and TRUE for live.
+	 *
+	 * If no environments have been defined then it will just send the email anyway.
+	 *
+	 * @since 0.01
+	 * @access public
+	 * @author WP Theme Tutorial, Curtis McHale
+	 *
+	 * @param string    $to             req     Who the email is to
+	 * @param string    $subject        req     The subject of the email
+	 * @param string    $message        req     The message content
+	 * @param string    $headers        req     The headers on the message
+	 * @param string    $attachments    opt     Any message attachments
+	 * @param           $phpmailer              The built phpmailer object from wp_mail
+	 *
+	 * @return bool
+	 *
+	 * @uses wp_kses_post()     Sanitizes post data
+	 * @uses $this->is_local()  Returns true if on the local environment
+	 * @uses $this->is_dev()    Returns true if on the dev environment
+	 * @uses $this->is_live()   Returns true if on the live environment
+	 */
+	public function log_wp_mail( $to, $subject, $message, $headers, $attachments, $phpmailer ){
+
+		$log_data = array(
+			'post_title'    => 'Email: '. $subject,
+			'post_content'  => wp_kses_post( $message ),
+			'log_type'      => 'event',
+		);
+
+		// meta
+		$log_meta = array(
+			'to_email'      => $to,
+			'headers'       => $headers,
+			'attachments'   => $attachments,
+			'date_time'     => time(),
+			'raw_message'   => $message,
+			'php_mailer'    => $phpmailer,
+		);
+
+		$log_entry = WP_Logging::insert_log( $log_data, $log_meta );
+
+		if( $this->is_local() ){
+			return apply_filters( 'wptt_dev_env_email_log', false );
+		} elseif ( $this->is_dev() ){
+			return apply_filters( 'wptt_dev_env_email_log', false );
+		} elseif ( $this->is_live() ){
+			return apply_filters( 'wptt_dev_env_email_log', true );
+		} else {
+			return true;
+		}
+
+	} // log_wp_mail
+
+	/**
+	 * Our conditional to decide if we are on the defined live environment
+	 *
+	 * @since 0.01
+	 * @access private
+	 * @author WP Theme Tutorial, Curtis McHale
+	 *
+	 * @return bool         True if we are on the defined live environment
+	 *
+	 * @uses site_url()     Returns the URL for the site
+	 */
+	public function is_live(){
+
+		if( defined( 'WPTT_LIVE' ) && WPTT_LIVE ){
+			if( WPTT_LIVE === site_url() ) return true;
+		}
+
+		return false;
+	} // is_live
+
+	/**
+	 * Our conditional to decide if we are on the defined development environment
+	 *
+	 * @since 0.01
+	 * @access private
+	 * @author WP Theme Tutorial, Curtis McHale
+	 *
+	 * @return bool         True if we are on the defined dev environment
+	 *
+	 * @uses site_url()     Returns the URL for the site
+	 */
+	public function is_dev(){
+
+		if( defined( 'WPTT_DEV' ) && WPTT_DEV ){
+			if( WPTT_DEV === site_url() ) return true;
+		}
+
+		return false;
+	} // is_dev
+
+	/**
+	 * Our conditional to decide if we are local
+	 *
+	 * @since 0.01
+	 * @access private
+	 * @author WP Theme Tutorial, Curtis McHale
+	 *
+	 * @return bool         True if we are on the defined local environment
+	 *
+	 * @uses site_url()     Returns the URL for the site
+	 */
+	public function is_local(){
+
+		if( defined( 'WPTT_LOCAL' ) && WPTT_LOCAL ){
+			if( WPTT_LOCAL === site_url() ) return true;
+		}
+
+		return false;
+	} // is_local
 
 	/**
 	 * Sets includes all the stuff we need from WP_Logging
@@ -45,8 +164,12 @@ class WPTT_Dev{
 	private function includes(){
 
 		if( ! class_exists( 'WP_Loging' ) ){
+
+			// our logging base class
 			require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/WP_Logging.php' );
 			require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/Logging_UI.php' );
+
+			require_once( plugin_dir_path( __FILE__ ) . '/pluggable.php' );
 		}
 
 	} // wp_logging
