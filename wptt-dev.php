@@ -30,18 +30,25 @@ class WPTT_Dev{
     function __construct(){
         add_filter( 'wp_logging_post_type_args', array( $this, 'change_logging_params' ), 10, 1 );
 
-	    $this->wp_logging();
+	    $this->includes();
     }
 
 	/**
 	 * Sets includes all the stuff we need from WP_Logging
 	 *
 	 * @since   0.01
+	 * @access private
 	 * @author  WP Theme Tutorial, Curtis McHale
+	 *
+	 * @uses plugin_dir_path()      Gets path to the plugin directory
 	 */
-	private function wp_logging(){
-		require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/WP_Logging.php' );
-		require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/Logging_UI.php' );
+	private function includes(){
+
+		if( ! class_exists( 'WP_Loging' ) ){
+			require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/WP_Logging.php' );
+			require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/Logging_UI.php' );
+		}
+
 	} // wp_logging
 
     /**
