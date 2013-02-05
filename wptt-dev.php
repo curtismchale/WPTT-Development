@@ -164,7 +164,7 @@ if( ! array_key_exists( 'wptt-dev', $GLOBALS ) ){
 		 */
 		private function includes(){
 
-			if( ! class_exists( 'WP_Loging' ) ){
+			if( ! class_exists( 'WP_Logging' ) ){
 
 				// our logging base class
 				require_once( plugin_dir_path( __FILE__ ) . '/lib/wp-logging/WP_Logging.php' );
